@@ -1,6 +1,10 @@
 # Practica1SisOp
 Practica 1 de sistemas operativos 2025-1
 
+## Integrantes:
+- Diego Alejandro Arevalo Arias
+- Angel David Beltran Garcia
+
 ## Descripcion:
 
 Se plantea la creacion de dos procesos para bucar campos en una base de datos.
