@@ -52,9 +52,9 @@ includes up to three genres associated with the title
 
 ## Modo de uso de los archivos:
 
-1) Iniciar p2-dataProgram
-1) Iniciar p1-dataProgram y crera la hash table si no ha sido creada
-3) Buscar por titulo y año
+1) Iniciar p1-dataProgram
+1) Iniciar p2-dataProgram y en p1-dataProgram crera la hash table si no ha sido creada
+3) Buscar por titulo y año en p1-dataProgram
 
 ## Explicacion general de funciones:
 
