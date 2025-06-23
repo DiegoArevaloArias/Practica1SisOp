@@ -1,6 +1,6 @@
 # Nombre de los ejecutables
-SERVER = servidor
-USER = cliente
+SERVER = p2-dataProgram
+USER = p1-dataProgram
 
 # Compilador
 CC = gcc
@@ -12,12 +12,12 @@ CFLAGS = -Wall -O2
 all: $(SERVER) $(USER)
 
 # Compilación de server
-$(SERVER): server.c
-	$(CC) $(CFLAGS) -o $(SERVER) servidor.c -lrt -pthread
+$(SERVER): p2-dataProgram.c
+	$(CC) $(CFLAGS) -o $(SERVER) p2-dataProgram.c -lrt -pthread
 
 # Compilación de user
-$(USER): user.c
-	$(CC) $(CFLAGS) -o $(USER) cliente.c -lrt -pthread
+$(USER): p1-dataProgram.c
+	$(CC) $(CFLAGS) -o $(USER) p1-dataProgram.c -lrt -pthread
 
 # Limpiar archivos generados
 clean:
