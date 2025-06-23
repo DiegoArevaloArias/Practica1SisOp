@@ -58,15 +58,21 @@ includes up to three genres associated with the title
 
 ## Explicacion general de funciones:
 
-hash_title(const char *str): Calcula un hash del título usando el algoritmo djb2, reducido al tamaño de la tabla.
 
-crear_tabla_hash(const char *path): Crea un archivo binario de tabla hash inicializando todos los buckets a cero.
+hash_title(const char *str): Calcula un hash del título usando el algoritmo djb2.
+
+
+crear_tabla_hash(const char *path): Crea un archivo binario de tabla hash inicializando todo a cero.
+
 
 insertar_en_disco(const char *path, const char *title, int year, off_t off): Inserta un nuevo nodo con título, año y offset al archivo hash enlazándolo al bucket correspondiente.
 
+
 construir(const char *hash_path, const char *tsv_path): Lee un archivo TSV y construye el archivo hash con títulos válidos y sus respectivos años.
 
-buscar_cadena(const char *hash_path, const char *tsv_path, off_t cabeza, int year, char *out): Recorre la lista de nodos desde un bucket buscando títulos del año especificado y los añade al buffer de salida.
+
+buscar_cadena(const char *hash_path, const char *tsv_path, off_t cabeza, int year, char *out): Recorre la lista de nodos títulos del año especificado y los añade al buffer de salida.
+
 
 ## Justificacion criterios:
 
