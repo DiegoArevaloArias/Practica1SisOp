@@ -52,26 +52,26 @@ includes up to three genres associated with the title
 
 ## Modo de uso de los archivos:
 
-1) Crear la hashtable ejecutando el servidor en ese modo
-2) Iniciar el servidor
-3) Iniciar el cliente
+1) Iniciar p2-dataProgram
+1) Iniciar p1-dataProgram y crera la hash table si no ha sido creada
+3) Buscar por titulo y año
 
 ## Explicacion general de funciones:
 
 
-hash_title(const char *str): Calcula un hash del título usando el algoritmo djb2.
+hash_string(const char *str): Calcula un hash del título usando el algoritmo djb2.
 
 
-crear_tabla_hash(const char *path): Crea un archivo binario de tabla hash inicializando todo a cero.
+crear_tabla_hash_vacia(const char *path): Crea un archivo binario de tabla hash inicializando todo a cero.
 
 
 insertar_en_disco(const char *path, const char *title, int year, off_t off): Inserta un nuevo nodo con título, año y offset al archivo hash enlazándolo al bucket correspondiente.
 
 
-construir(const char *hash_path, const char *tsv_path): Lee un archivo TSV y construye el archivo hash con títulos válidos y sus respectivos años.
+construir_desde_tsv(const char *hash_path, const char *tsv_path): Lee un archivo TSV y construye el archivo hash con títulos válidos y sus respectivos años.
 
 
-buscar_cadena(const char *hash_path, const char *tsv_path, off_t cabeza, int year, char *out): Recorre la lista de nodos títulos del año especificado y los añade al buffer de salida.
+ buscar_en_disco(const char *archivo_hash, const char *archivo_tsv, const char *title, SharedData *shared_data) : Recorre la lista de nodos títulos del año especificado y los añade al buffer de salida.
 
 
 ## Justificacion criterios:
