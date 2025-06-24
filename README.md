@@ -9,11 +9,14 @@ Practica 1 de sistemas operativos 2025-1
 
 Se plantea la creacion de dos procesos para bucar campos en una base de datos.
 
-- Proceso servidor: Crea una hashtable indexada a partir del titulo de la pelicula y que almacena nodos con indice en la base de datos, año, titulo, y nodo siguiente, en caso de que ya halla sido creada, recibe del cliente el titulo y busca el primer nodo, luego recibe el año y busca la coincidencia para mandar todo el campo de la base de datos al servidor.
-  
+- Proceso servidor: Crea una HashTable indexada a partir del titulo de la pelicula y que almacena nodos con indice en la base de datos, año, titulo, y nodo siguiente, en caso de que ya halla sido creada, recibe del cliente el titulo y busca el primer nodo, luego recibe el año y busca la coincidencia para mandar todo el campo de la base de datos al servidor.
+
 - Proceso cliente: Recibe el titulo y año de la pelicula que se quiere mostrar, lo manda al servidor y recibe el campo completo y lo muestra.
 
 ## Base de datos:  
+
+La base de datos está enfocada en títulos de películas lanzadas desde 1890 hasta la actualidad.
+
 
   https://www.kaggle.com/datasets/kunwarakash/imdbdatasets?select=title_basics.tsv
 
@@ -56,9 +59,9 @@ includes up to three genres associated with the title
 
 ## Modo de uso de los archivos:
 
-1) Iniciar p1-dataProgram
-1) Iniciar p2-dataProgram y en p1-dataProgram crera la hash table si no ha sido creada
-3) Buscar por titulo y año en p1-dataProgram
+1) Iniciar p1-dataProgram.
+1) Iniciar p2-dataProgram y en p1-dataProgram crear la HashTable si no ha sido creada.
+3) Buscar por titulo y año en p1-dataProgram.
 
 ## Explicacion general de funciones:
 
@@ -75,10 +78,9 @@ insertar_en_disco(const char *path, const char *title, int year, off_t off): Ins
 construir_desde_tsv(const char *hash_path, const char *tsv_path): Lee un archivo TSV y construye el archivo hash con títulos válidos y sus respectivos años.
 
 
- buscar_en_disco(const char *archivo_hash, const char *archivo_tsv, const char *title, SharedData *shared_data) : Recorre la lista de nodos títulos del año especificado y los añade al buffer de salida.
+buscar_en_disco(const char *archivo_hash, const char *archivo_tsv, const char *title, SharedData *shared_data) : Recorre la lista de nodos títulos del año especificado y los añade al buffer de salida.
 
 
 ## Justificacion criterios:
 
-Consideramos que el titulo y fecha son aquellas cosas mas comunes por las cuales se busca una pelicula, los otros criterios brindan informacion mucho mas especifica.
-
+Consideramos que los criterios título y fecha son los más optimos para la consulta, debido a que son los que más nos permiten acercarnos a un único resultado. Dentro de la base de datos se pueden encontrar varias películas con el mismo nombre, sin embargo, su año de lanzamiento es diferente.
