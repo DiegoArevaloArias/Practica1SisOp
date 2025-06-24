@@ -1,86 +1,67 @@
 # Practica1SisOp
-Practica 1 de sistemas operativos 2025-1
+
+Práctica 1: Búsqueda de Películas en Base de Datos
+
+Este proyecto, desarrollado para la asignatura de Sistemas Operativos 2025-1, implementa un sistema de búsqueda de películas utilizando dos procesos interconectados: un servidor y un cliente.
+
 
 ## Integrantes:
 - Diego Alejandro Arevalo Arias
 - Angel David Beltran Garcia
 
+
 ## Descripcion:
 
-Se plantea la creacion de dos procesos para bucar campos en una base de datos.
+El objetivo principal es permitir la búsqueda eficiente de títulos de películas en una base de datos. Para ello, se emplean dos procesos principales:
 
-- Proceso servidor: Crea una HashTable indexada a partir del titulo de la pelicula y que almacena nodos con indice en la base de datos, año, titulo, y nodo siguiente, en caso de que ya halla sido creada, recibe del cliente el titulo y busca el primer nodo, luego recibe el año y busca la coincidencia para mandar todo el campo de la base de datos al servidor.
+- Proceso Servidor:
+   - Crea y gestiona una HashTable indexada por el título de la película. Cada entrada de la HashTabel almacena nodos con el índice en la base de datos, año, título y un puntero al siguiente nodo (en caso de colisiones).
+   - Si la tabla hash ya existe, el servidor recibe el título y el año de la película del cliente.
+   - Busca el primer nodo que coincida con el título y luego filtra por el año para encontrar la entrada exacta en la base de datos, enviando el campo completo al cliente.
+- Proceso Cliente:
+   - Solicita al usuario el título y el año de la película que desea buscar.
+   - Envía esta información al proceso servidor.
+   - Recibe el campo completo de la película del servidor y lo muestra en pantalla.
 
-- Proceso cliente: Recibe el titulo y año de la pelicula que se quiere mostrar, lo manda al servidor y recibe el campo completo y lo muestra.
 
-## Base de datos:  
+## Base de Datos:  
 
-La base de datos está enfocada en títulos de películas lanzadas desde 1890 hasta la actualidad.
-
+La base de datos utilizada contiene información sobre películas lanzadas desde 1890 hasta la actualidad. Se obtuvo del siguiente enlace:
 
   https://www.kaggle.com/datasets/kunwarakash/imdbdatasets?select=title_basics.tsv
 
-## Formato: 
 
-tconst
-alphanumeric unique identifier of the title
+## Formato de los Datos: 
 
+El archivo title_basics.tsv contiene las siguientes columnas:
+ * tconst: Identificador alfanumérico único del título.
+ * titleType: Tipo/formato del título (ej. movie, short, tvseries, tvepisode, video).
+ * primaryTitle: El título más popular o el utilizado en materiales promocionales.
+ * originalTitle: Título original, en el idioma original.
+ * isAdult: Indicador de contenido para adultos (0: no-adulto; 1: adulto).
+ * startYear: Año de lanzamiento del título. En series de TV, es el año de inicio.
+ * endYear: Año de fin de la serie de TV. \N para otros tipos de títulos.
+ * runtimeMinutes: Duración principal del título en minutos.
+ * genres: Hasta tres géneros asociados al título.
 
-titleType
-the type/format of the title (e.g. movie, short, tvseries, tvepisode, video, etc)
-
-
-primaryTitle
-the more popular title / the title used by the filmmakers on promotional materials at the point of release
-
-
-originalTitle
-original title, in the original language
-
-
-isAdult
-0: non-adult title; 1: adult title
-
-
-startYear
-represents the release year of a title. In the case of TV Series, it is the series start year
-
-
-endYear
-TV Series end year. ‘\N’ for all other title types
-
-
-runtimeMinutes
-primary runtime of the title, in minutes
-
-
-genres
-includes up to three genres associated with the title
 
 ## Modo de uso de los archivos:
 
-1) Iniciar p1-dataProgram.
-1) Iniciar p2-dataProgram y en p1-dataProgram crear la HashTable si no ha sido creada.
-3) Buscar por titulo y año en p1-dataProgram.
-
-## Explicacion general de funciones:
+1) Iniciar el proceso cliente p1-dataProgram.
+1) Iniciar el proceso servidor p2-dataProgram. Desde p1-dataProgram generar la orden de crear la HashTable, si no ha sido creada.
+3) Utilizar p1-dataProgram para buscar películas por título y año.
 
 
-hash_string(const char *str): Calcula un hash del título usando el algoritmo djb2.
+## Explicación General de Funciones Clave
+
+Las siguientes funciones son fundamentales para el funcionamiento del proyecto:
+- hash_string(const char *str): Calcula el valor hash de un título utilizando el algoritmo djb2.
+- crear_tabla_hash_vacia(const char *path): Crea un archivo binario para la tabla hash, inicializando todas sus entradas a cero.
+- insertar_en_disco(const char *path, const char *title, int year, off_t off): Inserta un nuevo nodo (con título, año y offset en la base de datos) en el archivo hash, enlazándolo al bucket correspondiente.
+- construir_desde_tsv(const char *hash_path, const char *tsv_path): Lee el archivo TSV y construye el archivo hash, incluyendo solo los títulos válidos y sus años correspondientes.
+- buscar_en_disco(const char *archivo_hash, const char *archivo_tsv, const char *title, SharedData *shared_data): Recorre la lista de nodos asociados a un título y año específicos, añadiendo los resultados al búfer de salida compartido.
 
 
-crear_tabla_hash_vacia(const char *path): Crea un archivo binario de tabla hash inicializando todo a cero.
+## Justificación de Criterios de Búsqueda
 
-
-insertar_en_disco(const char *path, const char *title, int year, off_t off): Inserta un nuevo nodo con título, año y offset al archivo hash enlazándolo al bucket correspondiente.
-
-
-construir_desde_tsv(const char *hash_path, const char *tsv_path): Lee un archivo TSV y construye el archivo hash con títulos válidos y sus respectivos años.
-
-
-buscar_en_disco(const char *archivo_hash, const char *archivo_tsv, const char *title, SharedData *shared_data) : Recorre la lista de nodos títulos del año especificado y los añade al buffer de salida.
-
-
-## Justificacion criterios:
-
-Consideramos que los criterios título y fecha son los más optimos para la consulta, debido a que son los que más nos permiten acercarnos a un único resultado. Dentro de la base de datos se pueden encontrar varias películas con el mismo nombre, sin embargo, su año de lanzamiento es diferente.
+Consideramos que el título y el año de lanzamiento son los criterios más óptimos para la consulta, ya que nos permiten acercarnos a un resultado único y preciso. Aunque pueden existir varias películas con el mismo nombre, su año de lanzamiento suele ser diferente, lo que facilita la identificación de la entrada deseada en la base de datos.
