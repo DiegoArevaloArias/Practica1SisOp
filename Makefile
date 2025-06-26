@@ -1,24 +1,25 @@
-# Nombre de los ejecutables
-SERVER = p2-dataProgram
-USER = p1-dataProgram
-
-# Compilador
 CC = gcc
-
-# Opciones de compilación
 CFLAGS = -Wall -O2
 
-# Objetivos por defecto
-all: $(SERVER) $(USER)
+all: p1 p2
 
-# Compilación de server
-$(SERVER): p2-dataProgram.c
-	$(CC) $(CFLAGS) -o $(SERVER) p2-dataProgram.c -lrt -pthread
+p1: p1-dataProgram.c
+	$(CC) $(CFLAGS) -o p1 p1-dataProgram.c
 
-# Compilación de user
-$(USER): p1-dataProgram.c
-	$(CC) $(CFLAGS) -o $(USER) p1-dataProgram.c -lrt -pthread
+p2: p2-dataProgram.c
+	$(CC) $(CFLAGS) -o p2 p2-dataProgram.c
 
-# Limpiar archivos generados
+run-server: p2
+	./p2 &
+	sleep 1
+
+run1: p1
+	./p1 1
+
+run2: p1
+	./p1 2
+
+run: run-server run1
+
 clean:
-	rm -f $(SERVER) $(USER)
+	rm -f p1 p2
