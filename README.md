@@ -65,3 +65,19 @@ Las siguientes funciones son fundamentales para el funcionamiento del proyecto:
 ## Justificación de Criterios de Búsqueda
 
 Consideramos que el título y el año de lanzamiento son los criterios más óptimos para la consulta, ya que nos permiten acercarnos a un resultado único y preciso. Aunque pueden existir varias películas con el mismo nombre, su año de lanzamiento suele ser diferente, lo que facilita la identificación de la entrada deseada en la base de datos.
+
+## Tiempos de Ejecución
+Para evaluar el rendimiento del sistema, se utilizó la utilidad time a fin de medir el tiempo de ejecución completo del proceso de búsqueda. Se consideraron dos escenarios distintos:
+
+- Película existente en la base de datos
+Se utilizó como ejemplo la búsqueda del título "Matrix" (1999). El sistema realiza la búsqueda correctamente y retorna el registro correspondiente desde el archivo TSV.
+Resultado de la medición:
+  - https://github.com/user-attachments/assets/24e9459e-da6c-4662-b191-433863e83d97
+- Película inexistente en la base de datos
+Se buscó la película "Matrix" (2099), la cual no se encuentra en la base de datos. El sistema recorre los nodos correspondientes sin encontrar coincidencias.
+Resultado de la medición:
+  - https://github.com/user-attachments/assets/5e2b9fe2-1c19-4cc9-939f-a88761046c7a
+
+
+
+
