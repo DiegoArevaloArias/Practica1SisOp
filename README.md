@@ -66,6 +66,42 @@ Las siguientes funciones son fundamentales para el funcionamiento del proyecto:
 
 Consideramos que el título y el año de lanzamiento son los criterios más óptimos para la consulta, ya que nos permiten acercarnos a un resultado único y preciso. Aunque pueden existir varias películas con el mismo nombre, su año de lanzamiento suele ser diferente, lo que facilita la identificación de la entrada deseada en la base de datos.
 
+## Ejecución
+
+El programa `p1-dataProgram` puede ejecutarse con diferentes parámetros, permitiendo realizar tareas específicas según la fase del proceso:
+
+- **Modo interactivo (menú principal):**  
+  Ejecutando el programa con el argumento `1` se presenta un menú que permite al usuario seleccionar entre:
+  1. Construir la HashTable.
+  2. Realizar una búsqueda por título y año.
+  3. Salir del programa.
+
+  ```bash
+  ./p1-dataProgram 1
+  ```
+
+- **Modo de prueba directa:**  
+  Ejecutando el programa con el argumento `2`, se inicia automáticamente una búsqueda con datos predefinidos (por ejemplo, título: *The Matrix*, año: *1999*), ideal para pruebas rápidas de funcionamiento.
+
+  ```bash
+  time ./p1-dataProgram 2
+  ```
+
+  A modo de ejemplo, al ejecutar este comando, se observa una salida como la siguiente:
+
+  ```
+  Datos enviados al servidor (The Matrix, 1999). Esperando resultados...
+
+  Resultado
+  (Registro:
+  tt0133093	movie	The Matrix	The Matrix	0	1999	\N	136	Action,Sci-Fi
+
+  real    0m0,048s
+  user    0m0,030s
+  sys     0m0,131s
+  ```
+
+
 ## Tiempos de Ejecución
 Para evaluar el rendimiento del sistema, se utilizó la utilidad time a fin de medir el tiempo de ejecución completo del proceso de búsqueda. Se consideraron dos escenarios distintos:
 
