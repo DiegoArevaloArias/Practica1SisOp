@@ -261,7 +261,7 @@ void buscar_en_disco(const char *archivo_hash, const char *archivo_tsv, const ch
                 // Compara el año con el ingreado por el usuario
                 if (nodo.year == shared_data->year) {
                     // Guarda el resultado en la memoria compartida
-                    snprintf(shared_data->result, MAX_RESULT_LEN, "Registro:\n%s", line);
+                    snprintf(shared_data->result, MAX_RESULT_LEN, "\n%s", line);
                     shared_data->result_ready = true;
 
                     encontrado = true;
