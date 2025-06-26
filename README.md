@@ -78,6 +78,4 @@ Se buscó la película "Matrix" (2099), la cual no se encuentra en la base de da
 Resultado de la medición:
   - [Búsqueda inexistente con Matrix (2099)](https://github.com/user-attachments/assets/5e2b9fe2-1c19-4cc9-939f-a88761046c7a)
 
-
-
-
+Estos tiempos permiten verificar que el sistema mantiene un desempeño aceptable tanto en búsquedas exitosas como fallidas, demostrando eficiencia en la utilización de la estructura hash en disco y la sincronización entre procesos.
