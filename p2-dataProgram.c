@@ -20,13 +20,16 @@
 #include <errno.h>
 #include <ctype.h>
 #include <strings.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
 
 #define _POSIX_C_SOURCE 200809L
 
-#define TABLE_SIZE 211
+#define TABLE_SIZE 500
 #define MAX_TITLE_LEN 256
 #define SHM_NAME "/hash_table_shm"
 #define MAX_RESULT_LEN 4096
+#define SHM_KEY 0x1234
 
 // Estructura para compartir datos entre cliente y servidor
 typedef struct {
@@ -252,13 +255,13 @@ void buscar_en_disco(const char *archivo_hash, const char *archivo_tsv, const ch
 
                 // Espera hasta que el cliente ingrese el año
                 while (!shared_data->year_ready) {
-                    usleep(10000);
+                    usleep(1000);
                 }
 
                 // Compara el año con el ingreado por el usuario
                 if (nodo.year == shared_data->year) {
                     // Guarda el resultado en la memoria compartida
-                    snprintf(shared_data->result, MAX_RESULT_LEN, "%s", line);
+                    snprintf(shared_data->result, MAX_RESULT_LEN, "Registro:\n%s", line);
                     shared_data->result_ready = true;
 
                     encontrado = true;
@@ -287,46 +290,46 @@ void buscar_en_disco(const char *archivo_hash, const char *archivo_tsv, const ch
     fclose(f_tsv);
 }
 
+
 int main(void) {
-    const char *ruta_tsv = "title.basics.tsv";
+    const char *ruta_tsv = "/home/acbel/Documentos/Sistemas Operativos/Practica1/title.basics.tsv";
     const char *ruta_hash = "hash_table_title.dat";
 
-    // Abrir la memoria compartida
-    int shm_fd = shm_open(SHM_NAME, O_RDWR, 0666);
-    if (shm_fd == -1) {
-        perror("shm_open");
+    // Crear o acceder a memoria compartida con System V
+    int shm_id = shmget(SHM_KEY, sizeof(SharedData), IPC_CREAT | 0666);
+    if (shm_id == -1) {
+        perror("shmget");
         exit(EXIT_FAILURE);
     }
 
-    // Mapear la memoria compartida
-    SharedData *shared_data = mmap(NULL, sizeof(SharedData), PROT_READ | PROT_WRITE, MAP_SHARED, shm_fd, 0);
-    if (shared_data == MAP_FAILED) {
-        perror("mmap");
+    // Asociar el segmento de memoria al proceso
+    SharedData *shared_data = (SharedData *)shmat(shm_id, NULL, 0);
+    if (shared_data == (void *)-1) {
+        perror("shmat");
         exit(EXIT_FAILURE);
     }
 
     // Bucle principal del servidor
-    // Finaliza cuando se retorne un resultado
     while (!shared_data->result_ready) {
-        // Construye la HashTable si el cliente lo solicita
         if (shared_data->build_table_ready) {
             printf("Construyendo tabla hash desde TSV...\n");
             construir_desde_tsv(ruta_hash, ruta_tsv);
-            shared_data->build_table_ready = false;  // Indica que terminó
+            shared_data->build_table_ready = false;
         }
 
-        // Realiza una búsqueda si el cliente proporcionó un título
         if (shared_data->title_ready) {
             buscar_en_disco(ruta_hash, ruta_tsv, shared_data->title, shared_data);
             shared_data->title_ready = false;
         }
-        sleep(1);
+
+        usleep(1000);  // Espera breve
     }
 
-    // Libera los recursos utilizados
-    munmap(shared_data, sizeof(SharedData));
-    close(shm_fd);
-    shm_unlink(SHM_NAME);
+    // Desvincular la memoria del proceso
+    shmdt(shared_data);
+
+    // (Opcional) Eliminar la memoria del sistema
+    shmctl(shm_id, IPC_RMID, NULL);
 
     return EXIT_SUCCESS;
 }
